@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    card_view:cardCornerRadius="4dp" >
+
+    <LinearLayout
+        android:id="@+id/card_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/topicImage"
+                android:layout_width="fill_parent"
+                android:src="@drawable/placeholder_topic_image"
+                android:layout_height="250dp"
+                android:maxHeight="250dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                />
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/imageContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <RelativeLayout
+                android:id="@+id/cardHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:padding="16dp" >
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/cardContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cardHeader"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="0dp" >
+                <TextView
+                    android:id="@+id/popularItemTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:maxLines="10"
+                    android:text="Blendle now lets you pay-per-article from US apps"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_marginBottom="8dp"
+                    android:textStyle="normal" />
+                <TextView
+                    android:id="@+id/popularItemContent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:maxLines="4"
+                    android:autoLink="web"
+                    android:text="Blendle is a Dutch startup which aggregates news from media companies that maintain a paywall, then allows users to pay a small amount per article to read what they like."
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="17sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cardFooter"
+                android:paddingLeft="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cardContent" >
+                <ImageView
+                    android:id="@+id/publisherIcon"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="50dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/material_grey_300"
+                    android:scaleType="fitCenter"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView >

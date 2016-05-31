@@ -11,14 +11,16 @@ import com.edwardvanraak.burendo.communication.BlendleAPI;
 import com.edwardvanraak.burendo.domain.pojo.data.Api;
 import com.edwardvanraak.burendo.domain.pojo.data.popular_items.Item;
 import com.edwardvanraak.burendo.domain.pojo.data.popular_items.PopularItems;
+import com.edwardvanraak.burendo.userinterface.modules.popular_items.callbacks.OnPopularItemSelectedListener;
+import com.edwardvanraak.burendo.userinterface.modules.popular_items.fragments.PopularItemsFragment;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnPopularItemSelectedListener {
 
-    private static final String APP_NAME = "Burendo";
+    private static final String TAG = PopularItemsFragment.class.getCanonicalName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +28,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content_main, PopularItemsFragment.newInstance())
+                    .commit();
+        }
         retrieveAPILinks();
     }
 
+
+    @Override
+    public void onPopularItemSelected(String identifier) {
+
+    }
+
     /**
-     * TODO: Refactor and move this to appropriate class once ui/fragments are made
+     * TODO: Move this logic to service and fragment
      * Test retrieving API links and popular items
      */
     private void retrieveAPILinks() {
@@ -56,13 +69,13 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<PopularItems> call, Response<PopularItems> response) {
                 PopularItems popularItems = response.body();
                 for(Item item : popularItems.getResources().getItems()){
-                    Log.d(APP_NAME, "TITLE: " + item.getEmbedded().getManifest().getBody().get(0).getContent()); //Quick test to look at the title, or whatever is on the first position of the body ;)
+                    Log.d(TAG, "TITLE: " + item.getEmbedded().getManifest().getBody().get(0).getContent()); //Quick test to look at the title, or whatever is on the first position of the body ;)
                 }
             }
             @Override
             public void onFailure(Call<PopularItems> call, Throwable t) {
                 t.printStackTrace();
-                Log.d(APP_NAME, "Failed");
+                Log.d(TAG, "Failed");
             }
         });
     }

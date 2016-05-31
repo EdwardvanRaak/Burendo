@@ -22,7 +22,6 @@ public interface BlendleAPI {
     Call<Api> getApi();
 
     class Factory {
-
         private static BlendleAPI service;
         /**
          * Returns the instance of the BlendleAPI Singleton
