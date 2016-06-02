@@ -1,11 +1,17 @@
 package com.edwardvanraak.burendo.userinterface.modules.popular_items.adapters;
 
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.edwardvanraak.burendo.R;
 import com.edwardvanraak.burendo.userinterface.components.ItemComponent;
 import com.edwardvanraak.burendo.userinterface.modules.advertising.models.AdvertisementsItemEntry;
@@ -33,7 +39,7 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void addComponent(ItemComponent component){
         assertNotNull(component);
         components.add(component);
-        notifyDataSetChanged();
+        notifyItemInserted(components.size() - 1);
     }
 
     @Override
@@ -51,6 +57,11 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    public void clear() {
+        components.clear();
+        notifyDataSetChanged();
+    }
+
     public static class AdvertisementEntryViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.dummyText)TextView dummyText;
@@ -64,6 +75,8 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static class PopularItemEntryViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.popularItemTitle)TextView title;
+        @BindView(R.id.topicImage)ImageView image;
+        @BindView(R.id.publisherIcon)ImageView publisherIcon;
 
         public PopularItemEntryViewHolder(final View view) {
             super(view);
@@ -91,7 +104,9 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void bindPopularItemEntry(PopularItemEntry popularItemEntry, PopularItemEntryViewHolder popularItemEntryViewHolder) {
-        //TODO:
+        popularItemEntryViewHolder.title.setText(Html.fromHtml(popularItemEntry.getTitle().toString()));
+        Glide.with(popularItemEntryViewHolder.image.getContext()).load(popularItemEntry.getContentImageURL()).into(popularItemEntryViewHolder.image);
+        Glide.with(popularItemEntryViewHolder.publisherIcon.getContext()).load(popularItemEntry.getPublisherIconURL()).into(popularItemEntryViewHolder.publisherIcon);
     }
 
     @Override

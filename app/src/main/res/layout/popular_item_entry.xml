@@ -51,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cardHeader"
                 android:orientation="vertical"
-                android:paddingBottom="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="0dp" >
@@ -73,7 +72,6 @@
                     android:layout_alignParentLeft="true"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:maxLines="4"
-                    android:autoLink="web"
                     android:text="Blendle is a Dutch startup which aggregates news from media companies that maintain a paywall, then allows users to pay a small amount per article to read what they like."
                     android:fontFamily="sans-serif-light"
                     android:textSize="17sp"
@@ -82,18 +80,16 @@
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/cardFooter"
-                android:paddingLeft="3dp"
-                android:layout_marginLeft="3dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cardContent" >
                 <ImageView
                     android:id="@+id/publisherIcon"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:maxWidth="50dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_margin="16dp"
+                    android:maxWidth="100dp"
                     android:adjustViewBounds="true"
-                    android:background="@color/material_grey_300"
                     android:scaleType="fitCenter"
                     />
             </LinearLayout>

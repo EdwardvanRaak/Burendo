@@ -4,6 +4,8 @@ package com.edwardvanraak.burendo.domain.pojo.data.popular_items;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
+
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
@@ -27,6 +29,25 @@ public class Item {
     @SerializedName("price")
     @Expose
     private String price;
+
+    public String findUniqueContentByType(String type){
+        for(Body body : embedded.getManifest().getBody()){
+            if(body.getType().equals(type)){
+                return body.getContent();
+            }
+        }
+        return "";
+    }
+
+    public String getLargeImageHref(){
+        for(Image image : embedded.getManifest().getImages()){
+            Large large = image.getLinks().getLarge();
+            if(image.getLinks().getLarge() != null){
+                return large.getHref();
+            }
+        }
+        return null;
+    }
 
     /**
      * 
