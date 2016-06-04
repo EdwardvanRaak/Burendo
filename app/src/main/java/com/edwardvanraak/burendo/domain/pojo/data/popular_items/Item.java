@@ -1,10 +1,9 @@
 
 package com.edwardvanraak.burendo.domain.pojo.data.popular_items;
 
+import com.edwardvanraak.burendo.communication.ApiConstants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.HashMap;
 
 import javax.annotation.Generated;
 
@@ -47,6 +46,19 @@ public class Item {
             }
         }
         return null;
+    }
+
+    /**
+     * I forgot my paint bucket
+     */
+    public String getUnformattedContent(){
+        String content = "";
+        for(Body body : embedded.getManifest().getBody()){
+            if(!body.getType().equals(ApiConstants.CONTENT_TYPE_MAIN_HEADLINE)){
+                content += body.getContent() + "<br>";
+            }
+        }
+        return content;
     }
 
     /**

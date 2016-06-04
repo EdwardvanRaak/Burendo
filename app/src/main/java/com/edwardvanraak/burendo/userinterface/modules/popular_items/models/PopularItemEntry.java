@@ -2,14 +2,12 @@ package com.edwardvanraak.burendo.userinterface.modules.popular_items.models;
 
 import com.edwardvanraak.burendo.userinterface.components.ItemComponent;
 
-import static junit.framework.Assert.assertNotNull;
-
 public class PopularItemEntry extends ItemComponent {
 
     private String id;
 
     private String title;
-    private String author;
+    private String content;
     private String price;
 
     private String contentImageURL;
@@ -31,8 +29,8 @@ public class PopularItemEntry extends ItemComponent {
         return this;
     }
 
-    public PopularItemEntry withAuthor(String author){
-        this.author = author;
+    public PopularItemEntry withContent(String content){
+        this.content = content;
         return this;
     }
 
@@ -51,14 +49,6 @@ public class PopularItemEntry extends ItemComponent {
         return this;
     }
 
-    public void validate(){
-        assertNotNull(title);
-        assertNotNull(author);
-        assertNotNull(price);
-        assertNotNull(contentImageURL);
-        assertNotNull(publisherIconURL);
-    }
-
     public boolean isConsumed() {
         return consumed;
     }
@@ -71,8 +61,8 @@ public class PopularItemEntry extends ItemComponent {
         return title;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getContent() {
+        return content;
     }
 
     public String getPrice() {

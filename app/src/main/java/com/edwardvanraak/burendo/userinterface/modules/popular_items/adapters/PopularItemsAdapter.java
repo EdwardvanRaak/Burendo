@@ -1,17 +1,19 @@
 package com.edwardvanraak.burendo.userinterface.modules.popular_items.adapters;
 
-import android.os.Handler;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.edwardvanraak.burendo.R;
 import com.edwardvanraak.burendo.userinterface.components.ItemComponent;
 import com.edwardvanraak.burendo.userinterface.modules.advertising.models.AdvertisementsItemEntry;
@@ -74,9 +76,14 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class PopularItemEntryViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.card_view)CardView container;
         @BindView(R.id.popularItemTitle)TextView title;
+        @BindView(R.id.popularItemContent)TextView content;
         @BindView(R.id.topicImage)ImageView image;
         @BindView(R.id.publisherIcon)ImageView publisherIcon;
+        @BindView(R.id.priceTag)TextView priceTag;
+
+        boolean hideImage = false;
 
         public PopularItemEntryViewHolder(final View view) {
             super(view);
@@ -90,7 +97,7 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(holder instanceof PopularItemEntryViewHolder){
             PopularItemEntry popularItemEntry = (PopularItemEntry)itemComponent;
             PopularItemEntryViewHolder popularItemEntryViewHolder = (PopularItemEntryViewHolder)holder;
-            bindPopularItemEntry(popularItemEntry, popularItemEntryViewHolder);
+            bindPopularItemEntry(popularItemEntry, popularItemEntryViewHolder, position);
         }
         else if(itemComponent instanceof AdvertisementsItemEntry){
             AdvertisementsItemEntry advertisementsItemEntry = (AdvertisementsItemEntry)itemComponent;
@@ -103,10 +110,30 @@ public class PopularItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         advertisementEntryViewHolder.dummyText.setText(advertisementsItemEntry.getText());
     }
 
-    private void bindPopularItemEntry(PopularItemEntry popularItemEntry, PopularItemEntryViewHolder popularItemEntryViewHolder) {
-        popularItemEntryViewHolder.title.setText(Html.fromHtml(popularItemEntry.getTitle().toString()));
-        Glide.with(popularItemEntryViewHolder.image.getContext()).load(popularItemEntry.getContentImageURL()).into(popularItemEntryViewHolder.image);
-        Glide.with(popularItemEntryViewHolder.publisherIcon.getContext()).load(popularItemEntry.getPublisherIconURL()).into(popularItemEntryViewHolder.publisherIcon);
+    private void bindPopularItemEntry(final PopularItemEntry popularItemEntry, final PopularItemEntryViewHolder holder, final int position) {
+        holder.image.setVisibility(View.VISIBLE);
+        holder.title.setText(Html.fromHtml(popularItemEntry.getTitle()));
+        holder.content.setText(Html.fromHtml(popularItemEntry.getContent()));
+        holder.priceTag.setText(popularItemEntry.getPrice());
+        Glide.with(holder.publisherIcon.getContext()).load(popularItemEntry.getPublisherIconURL()).into(holder.publisherIcon);
+        Glide.with(holder.image.getContext()).load(popularItemEntry.getContentImageURL()).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                holder.image.setVisibility(View.GONE);
+                return false;
+            }
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                return false;
+            }
+        }).into(holder.image);
+        ViewCompat.setTransitionName(holder.image, String.valueOf(position) + "_image"); //Unique identifier
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPopularItemSelectedListener.onPopularItemSelected(holder, popularItemEntry);
+            }
+        });
     }
 
     @Override

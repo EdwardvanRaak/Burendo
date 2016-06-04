@@ -2,6 +2,10 @@
 <android.support.v7.widget.CardView  xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
+    android:transitionGroup="true"
+    android:stateListAnimator="@animator/raise"
+    android:clickable="true"
+    android:foreground="@drawable/item_ripple"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -14,19 +18,18 @@
         android:id="@+id/card_view_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:background="?android:attr/selectableItemBackground"
         android:orientation="vertical" >
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/topicImage"
                 android:layout_width="fill_parent"
-                android:src="@drawable/placeholder_topic_image"
-                android:layout_height="250dp"
-                android:maxHeight="250dp"
+                android:layout_height="200dp"
+                android:maxHeight="200dp"
+                android:src="@drawable/header"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 />
@@ -61,7 +64,6 @@
                     android:layout_alignParentLeft="true"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:maxLines="10"
-                    android:text="Blendle now lets you pay-per-article from US apps"
                     android:fontFamily="sans-serif-light"
                     android:layout_marginBottom="8dp"
                     android:textStyle="normal" />
@@ -71,17 +73,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:maxLines="4"
-                    android:text="Blendle is a Dutch startup which aggregates news from media companies that maintain a paywall, then allows users to pay a small amount per article to read what they like."
                     android:fontFamily="sans-serif-light"
                     android:textSize="17sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:maxLines="6" />
 
             </LinearLayout>
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/cardFooter"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_below="@+id/cardContent" >
                 <ImageView
                     android:id="@+id/publisherIcon"
@@ -91,8 +94,24 @@
                     android:maxWidth="100dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     />
-            </LinearLayout>
+
+                <TextView
+                    android:id="@+id/priceTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="21sp"
+                    android:paddingRight="16dp"
+                    android:textColor="?colorPrimary"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+
         </RelativeLayout>
     </LinearLayout>
 

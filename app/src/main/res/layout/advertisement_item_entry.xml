@@ -20,7 +20,7 @@
         android:background="@color/md_red_500"
         android:orientation="vertical">
         <TextView
-            android:text="THIS IS A PLACEHOLDER"
+            android:text="Dit is een hele saaie aanbieding"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textStyle="bold"

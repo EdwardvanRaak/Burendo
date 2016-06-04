@@ -6,16 +6,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.edwardvanraak.burendo.userinterface.modules.popular_items.callbacks.OnPopularItemSelectedListener;
 import com.edwardvanraak.burendo.userinterface.modules.popular_items.fragments.PopularItemsFragment;
 
-import rx.subscriptions.CompositeSubscription;
-
-public class MainActivity extends AppCompatActivity implements OnPopularItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = PopularItemsFragment.class.getCanonicalName();
-
-    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +23,6 @@ public class MainActivity extends AppCompatActivity implements OnPopularItemSele
                     .add(R.id.content_main, PopularItemsFragment.newInstance())
                     .commit();
         }
-    }
-
-
-    @Override
-    public void onPopularItemSelected(String identifier) {
-
     }
 
     @Override

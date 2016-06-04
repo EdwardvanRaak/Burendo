@@ -1,12 +1,14 @@
 package com.edwardvanraak.burendo.userinterface.modules.popular_items.fragments;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +21,11 @@ import com.edwardvanraak.burendo.domain.pojo.data.popular_items.Item;
 import com.edwardvanraak.burendo.domain.pojo.data.popular_items.PopularItems;
 import com.edwardvanraak.burendo.services.ApiLinkService;
 import com.edwardvanraak.burendo.userinterface.modules.advertising.models.AdvertisementsItemEntry;
+import com.edwardvanraak.burendo.userinterface.modules.item_content.ItemContentFragment;
 import com.edwardvanraak.burendo.userinterface.modules.popular_items.adapters.PopularItemsAdapter;
 import com.edwardvanraak.burendo.userinterface.modules.popular_items.callbacks.OnPopularItemSelectedListener;
 import com.edwardvanraak.burendo.userinterface.modules.popular_items.models.PopularItemEntry;
+import com.edwardvanraak.burendo.utility.ContentTransition;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,8 +44,6 @@ import rx.subscriptions.CompositeSubscription;
 public class PopularItemsFragment extends Fragment implements OnPopularItemSelectedListener {
 
     private static final String TAG = PopularItemsFragment.class.getCanonicalName();
-
-    private OnPopularItemSelectedListener onPopularItemSelectedListener;
 
     @BindView(R.id.popularItemsRecyclerView) RecyclerView recyclerView;
     @BindView(R.id.popularItemsSwipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
@@ -129,6 +131,8 @@ public class PopularItemsFragment extends Fragment implements OnPopularItemSelec
             String largeImageURL = item.getLargeImageHref();
             adapter.addComponent(new PopularItemEntry()
                     .withContentImageURL(largeImageURL)
+                    .withContent(item.getUnformattedContent())
+                    .withPriceTag("€ "+ item.getPrice().replace(".",",")) //Just ignore the fact that we can have different types of currency for now...
                     .withPublisherIconURL(ApiConstants.getPublisherIcon(item.getEmbedded().getManifest().getProvider().getId()))
                     .withTitle(item.findUniqueContentByType(ApiConstants.CONTENT_TYPE_MAIN_HEADLINE)));
             /**
@@ -165,11 +169,6 @@ public class PopularItemsFragment extends Fragment implements OnPopularItemSelec
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnPopularItemSelectedListener) {
-            onPopularItemSelectedListener = (OnPopularItemSelectedListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnPopularItemSelectedListener");
-        }
     }
 
     @Override
@@ -181,12 +180,23 @@ public class PopularItemsFragment extends Fragment implements OnPopularItemSelec
     @Override
     public void onDetach() {
         super.onDetach();
-        onPopularItemSelectedListener = null;
         adapter.clean();
     }
 
     @Override
-    public void onPopularItemSelected(String identifier) {
-        onPopularItemSelectedListener.onPopularItemSelected(identifier);
+    public void onPopularItemSelected(PopularItemsAdapter.PopularItemEntryViewHolder popularItemEntryViewHolder, PopularItemEntry popularItemEntry) {
+        ItemContentFragment contentFragment = ItemContentFragment.newInstance(popularItemEntry);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            contentFragment.setSharedElementEnterTransition(new ContentTransition());
+            contentFragment.setEnterTransition(new Fade());
+            setExitTransition(new Fade());
+            contentFragment.setSharedElementReturnTransition(new ContentTransition());
+        }
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(popularItemEntryViewHolder.itemView.findViewById(R.id.topicImage), getString(R.string.transition_image))
+                .replace(R.id.content_main, contentFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }
