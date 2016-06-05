@@ -26,22 +26,26 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static junit.framework.Assert.assertNotNull;
-
 public class PopularItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<ItemComponent> components = new ArrayList<>();
 
     private OnPopularItemSelectedListener onPopularItemSelectedListener;
 
+    private Object lock = new Object();
+
     public PopularItemsAdapter(OnPopularItemSelectedListener onPopularItemSelectedListener) {
         this.onPopularItemSelectedListener = onPopularItemSelectedListener;
     }
 
     public void addComponent(ItemComponent component){
-        assertNotNull(component);
-        components.add(component);
-        notifyItemInserted(components.size() - 1);
+        synchronized (lock) {
+            components.add(component);
+        }
+    }
+
+    public void notifyRangeAdded(){
+        notifyItemRangeInserted(0, getItemCount());
     }
 
     @Override

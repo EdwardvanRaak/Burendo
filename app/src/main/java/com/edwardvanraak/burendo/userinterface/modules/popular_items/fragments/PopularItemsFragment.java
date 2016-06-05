@@ -5,14 +5,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.edwardvanraak.burendo.R;
 import com.edwardvanraak.burendo.communication.ApiConstants;
@@ -31,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
@@ -47,6 +49,7 @@ public class PopularItemsFragment extends Fragment implements OnPopularItemSelec
 
     @BindView(R.id.popularItemsRecyclerView) RecyclerView recyclerView;
     @BindView(R.id.popularItemsSwipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.empty) ProgressBar empty;
 
     private PopularItemsAdapter adapter;
     private LinearLayoutManager layoutManager;
@@ -94,7 +97,9 @@ public class PopularItemsFragment extends Fragment implements OnPopularItemSelec
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<String>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                        empty.setVisibility(View.GONE);
+                    }
                     @Override
                     public void onError(Throwable error) {
                         handleError(error);
@@ -142,6 +147,7 @@ public class PopularItemsFragment extends Fragment implements OnPopularItemSelec
                 adapter.addComponent(new AdvertisementsItemEntry());
             }
         }
+        adapter.notifyRangeAdded();
     }
 
     private void handleError(Throwable error) {
@@ -156,14 +162,12 @@ public class PopularItemsFragment extends Fragment implements OnPopularItemSelec
     }
 
     private void prepareRecyclerView() {
-        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new PopularItemsAdapter(this);
-        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
-        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
-        recyclerView.setItemAnimator(defaultItemAnimator);
+        recyclerView.setItemAnimator(new FadeInUpAnimator());
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -188,7 +192,7 @@ public class PopularItemsFragment extends Fragment implements OnPopularItemSelec
         ItemContentFragment contentFragment = ItemContentFragment.newInstance(popularItemEntry);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             contentFragment.setSharedElementEnterTransition(new ContentTransition());
-            contentFragment.setEnterTransition(new Fade());
+            contentFragment.setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.list_reenter));
             setExitTransition(new Fade());
             contentFragment.setSharedElementReturnTransition(new ContentTransition());
         }
