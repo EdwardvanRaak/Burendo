@@ -10,8 +10,6 @@ import com.edwardvanraak.burendo.userinterface.modules.popular_items.fragments.P
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = PopularItemsFragment.class.getCanonicalName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
